@@ -1,6 +1,7 @@
 package com.sdsmdg.vishwas.speechless;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -19,6 +20,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
     public CameraPreview(Context context, Camera camera) {
         super(context);
+        Log.e(TAG, "CameraPreview Constructor is called");
         mCamera = camera;
 
         // Install a SurfaceHolder.Callback so we get notified when the
@@ -30,6 +32,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     }
 
     public void surfaceCreated(SurfaceHolder holder) {
+        Log.e(TAG, "Surface Created");
         // The Surface has been created, now tell the camera where to draw the preview.
         try {
             mCamera.setPreviewDisplay(holder);
@@ -40,10 +43,12 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     }
 
     public void surfaceDestroyed(SurfaceHolder holder) {
+        Log.e(TAG, "surface destroyed");
         // empty. Take care of releasing the Camera preview in your activity.
     }
 
     public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
+        Log.e(TAG, "Surface changed");
         // If your preview can change or rotate, take care of those events here.
         // Make sure to stop the preview before resizing or reformatting it.
 
@@ -64,6 +69,12 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
         // start preview with new settings
         try {
+            mCamera.setPreviewCallback(new Camera.PreviewCallback() {
+                @Override
+                public void onPreviewFrame(byte[] data, Camera camera) {
+                    Log.e(TAG, "capturing the data frames");
+                }
+            });
             mCamera.setPreviewDisplay(mHolder);
             mCamera.startPreview();
 
